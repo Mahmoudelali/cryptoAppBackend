@@ -1,24 +1,24 @@
-
 from . import views
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path, include, re_path
+from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('news', views.NewsApiView.as_view(), name='news'),
-    
-    path('rumors', views.RumorsApiView.as_view() , name='rumors'),
-    path('signals', views.SignalsApiView.as_view() , name='signals'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('news/<int:blog_id>/comment/', views.CommentsApiView.as_view(), name='comment-create'),
-    path('favorite-coins/create/', views.FavoriteCoinCreateView.as_view(), name='create-favorite-coin'),
-    path('admin/', admin.site.urls),
-    path('accounts/', include('backend.urls')),
+    path("news", views.NewsApiView.as_view(), name="news"),
+    path("news/<int:blog_id>", views.SendOfferView.as_view(), name="news"),
+    path("rumors", views.RumorsApiView.as_view(), name="rumors"),
+    path("signals", views.SignalsApiView.as_view(), name="signals"),
+    path(
+        "news/<int:blog_id>/comment/",
+        views.CommentsApiView.as_view(),
+        name="comment-create",
+    ),
+    path(
+        "favorite-coins/create/",
+        views.FavoriteCoinCreateView.as_view(),
+        name="create-favorite-coin",
+    ),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

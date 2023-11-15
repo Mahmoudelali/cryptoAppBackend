@@ -17,18 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.urls import path
+from backend import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('backend.urls'))
+    path("admin/", admin.site.urls),
+    path("api/", include("backend.urls")),
+    re_path("signup", views.signup),
+    re_path("login", views.login),
 ]
-urlpatterns += [
-    re_path(r'^auth/', include('djoser.urls')),
-    re_path(r'^auth/', include('djoser.urls.authtoken')),
-
-]
-
-
-
-
