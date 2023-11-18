@@ -20,6 +20,24 @@ class NewsApiView(generics.ListAPIView):
     serializer_class = NewsSerializer
 
 
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user_id = self.request.data.get("user_id")
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(user=user, news=self.get_news_object())
+
+    def get_news_object(self):
+        # Implement a method to get the News object based on your requirements
+        # You can extract the news ID from the URL or request data, then retrieve the corresponding News object
+        # Example:
+        news_id = self.kwargs.get("news_id")  # Adjust based on your URL pattern
+        return News.objects.get(id=news_id)
+
+
 class SignalsApiView(generics.ListCreateAPIView):
     queryset = Signals.objects.all()
     serializer_class = SignalsSerializer
@@ -30,16 +48,6 @@ class RumorsApiView(generics.ListCreateAPIView):
     serializer_class = RumorsSerializer
 
 
-class CommentsApiView(generics.CreateAPIView):
-    queryset = Comments.objects.all()
-    serializer_class = CommentsSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        blog = get_object_or_404(News, pk=self.kwargs["blog_id"])
-        serializer.save(user=self.request.user, blog=blog)
-
-
 class FavoriteCoinCreateView(generics.ListCreateAPIView):
     model = FavoriteCoin
     queryset = FavoriteCoin.objects.all()
@@ -47,8 +55,6 @@ class FavoriteCoinCreateView(generics.ListCreateAPIView):
     fields = ["coin_id", "name", "symbol"]
     template_name = "favorite_coin_form.html"
 
-
-# LoginView
 
 from rest_framework.decorators import (
     api_view,
@@ -81,6 +87,7 @@ def signup(request):
 
 @api_view(["POST"])
 def login(request):
+    print("request.data", request.data)
     user = get_object_or_404(User, username=request.data["username"])
     if not user.check_password(request.data["password"]):
         return Response("missing user", status=status.HTTP_404_NOT_FOUND)

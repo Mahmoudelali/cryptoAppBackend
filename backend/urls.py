@@ -11,14 +11,10 @@ urlpatterns = [
     path("rumors", views.RumorsApiView.as_view(), name="rumors"),
     path("signals", views.SignalsApiView.as_view(), name="signals"),
     path(
-        "news/<int:blog_id>/comment/",
-        views.CommentsApiView.as_view(),
-        name="comment-create",
-    ),
-    path(
         "favorite-coins/create/",
         views.FavoriteCoinCreateView.as_view(),
         name="create-favorite-coin",
     ),
+    path("comments/", views.CommentCreateView.as_view(), name="comment-create"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

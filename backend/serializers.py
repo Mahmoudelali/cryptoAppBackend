@@ -12,11 +12,11 @@ class UserSerializer(serializers.ModelSerializer):
 class AuthorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username", "id"]
+        fields = ["id", "username"]
 
 
 class CommentsSerializer(serializers.ModelSerializer):
-    user_id = AuthorsSerializer()
+    user = AuthorsSerializer()
 
     class Meta:
         model = Comments
@@ -36,9 +36,11 @@ class RumorsSerializer(serializers.ModelSerializer):
 
 
 class NewsSerializer(serializers.ModelSerializer):
+    comments = CommentsSerializer(many=True, read_only=True)
+
     class Meta:
         model = News
-        fields = ["id", "title", "content", "image"]
+        fields = ["id", "title", "content", "image", "comments"]
 
 
 class FavoriteCoinSerializer(serializers.ModelSerializer):
