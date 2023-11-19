@@ -46,6 +46,9 @@ class Rumors(models.Model):
 class FavoriteCoin(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    symbol = models.CharField(max_length=100, null=True)
+    image = models.CharField(max_length=1000, null=True)
+    price = models.CharField(max_length=255  , null=True)
 
     def __str__(self):
         return f"{self.name} ({self.symbol}) - User: {self.user.username}"

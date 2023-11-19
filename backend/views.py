@@ -52,8 +52,7 @@ class FavoriteCoinCreateView(generics.ListCreateAPIView):
     model = FavoriteCoin
     queryset = FavoriteCoin.objects.all()
     serializer_class = FavoriteCoinSerializer
-    fields = ["coin_id", "name", "symbol"]
-    template_name = "favorite_coin_form.html"
+    # fields = ["coin_id", "name", "symbol"]
 
 
 from rest_framework.decorators import (
